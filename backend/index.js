@@ -35,22 +35,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('/new', (req, res) => {
-  const { name, email, password } = req.body;
 
-  const checkEmailQuery = 'SELECT * FROM users WHERE email = ?';
-  db.query(checkEmailQuery, [email], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Database error' });
-    if (results.length > 0)
-      return res.status(400).json({ message: 'Email already registered' });
-
-    const insertUser = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
-    db.query(insertUser, [name, email, password], (err2) => {
-      if (err2) return res.status(500).json({ message: 'Error inserting user' });
-      res.status(201).json({ message: 'User registered successfully' });
-    });
-  });
-});
 
 app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
