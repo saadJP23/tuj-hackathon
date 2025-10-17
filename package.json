@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "react-hook-form": "^7.65.0",
+    "react-router-dom": "^7.9.4"
+  }
+}
