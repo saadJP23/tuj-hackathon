@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 
 const Register = () => {
+
+  const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   let [newUser, setNewUser] = useState({
     username: "",
@@ -28,7 +30,7 @@ const Register = () => {
 
     try {
       let response = await axios.post(
-        "http://localhost:5000/register",
+        `${API_URL}/register`,
         newUser
       );
       if (response.data.message === "Email already registered") {
@@ -42,7 +44,7 @@ const Register = () => {
   };
 
   const login = async (email, password) => {
-    const response = await axios.post("http://localhost:5000/login", {
+    const response = await axios.post(`${API_URL}/login`, {
       email,
       password,
     });
