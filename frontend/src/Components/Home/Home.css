@@ -1,22 +1,12 @@
 /* Reset and body */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: "Montserrat", sans-serif;
   background: #f0f2f5; /* soft gray */
   margin: 0;
   padding: 0;
-}
-
-.app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
 }
 
 /* Header */
@@ -42,11 +32,6 @@ h4 {
   padding-left: 15px;
   font-size: 1rem;
   margin: 0;
-}
-
-.header_div {
-  text-align: center;
-  margin-top: 10px;
 }
 
 /* Floor selector buttons */
@@ -77,15 +62,9 @@ h4 {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.floor-selector button.active {
-  background: #2ecc71;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
-}
-
 /* Map container */
 .map-container {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   background: #ffffff;
@@ -93,7 +72,7 @@ h4 {
   border-radius: 20px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.6s ease forwards;
-  margin: 20px 0;
+  margin-bottom: 28px;
 }
 
 /* Fade-in animation */
@@ -108,7 +87,7 @@ h4 {
   }
 }
 
-/* Building grid */
+/* Building grid (same look as 3F plan) */
 .building {
   display: grid;
   grid-template-columns: repeat(7, minmax(80px, 1fr));
@@ -137,7 +116,7 @@ h4 {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* Room colors */
+/* Room fill colors (size) */
 .small {
   background: linear-gradient(135deg, #4dabf7, #1e90ff);
 }
@@ -145,15 +124,21 @@ h4 {
   background: linear-gradient(135deg, #f0932b, #ffb347);
 }
 
-/* Status borders */
+/* Status borders — thicker and clearer */
 .empty {
-  border: 3px solid #2ecc71;
+  border: 6px solid #62ec9c;
 } /* green */
+.less {
+  border: 6px solid #0ec49f;
+} /* teal */
+.moderate {
+  border: 6px solid #efa937;
+} /* orange */
 .busy {
-  border: 3px solid #f1c40f;
-} /* yellow */
+  border: 6px solid #a04f09;
+} /* dark orange */
 .full {
-  border: 3px solid #e74c3c;
+  border: 6px solid #e52510;
 } /* red */
 
 /* Tooltip */
@@ -197,11 +182,88 @@ h4 {
 }
 
 .legend .empty {
-  background-color: #2ecc71;
+  background-color: #62ec9c;
+}
+.legend .less {
+  background-color: #0ec49f;
+}
+.legend .moderate {
+  background-color: #efa937;
 }
 .legend .busy {
-  background-color: #f1c40f;
+  background-color: #a04f09;
 }
 .legend .full {
-  background-color: #e74c3c;
+  background-color: #e52510;
+}
+
+/* --- Small popup for Join/Leave & quick status --- */
+.popover-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  pointer-events: auto; /* click-through except the popover */
+  z-index: 9998;
+}
+
+.popover {
+  position: fixed;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+  padding: 14px 16px;
+  z-index: 9999;
+  animation: fadeIn 0.15s ease-out forwards;
+}
+
+.popover h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.popover .meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.popover .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.popover .actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popover .btn-join {
+  background: #2ecc71;
+  color: #fff;
+}
+.popover .btn-leave {
+  background: #e74c3c;
+  color: #fff;
+}
+.popover .btn-close {
+  background: #e0e0e0;
+  color: #333;
+  margin-left: auto;
+}
+
+.popover .actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.popover .hr {
+  height: 1px;
+  background: #eee;
+  margin: 10px 0;
 }
