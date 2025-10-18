@@ -1,122 +1,118 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import "./Register.css";
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
-
-const Register = () => {
-
-  const API_URL = process.env.REACT_APP_API_URL;
+function Register() {
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  let [newUser, setNewUser] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    console.log('Input changed:', e.target.name, e.target.value);
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const registerMe = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("Rigestration button clicked ") // debugging -- leave in case it braks again
-
+    setLoading(true);
+    setMessage('');
+    
     try {
-      let response = await axios.post(
-        `${API_URL}/register`,
-        newUser
-      );
-      if (response.data.message === "Email already registered") {
-        setError("Email aready exist.");
+      const response = await fetch(`${API_URL}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage('Registration successful! Please login.');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } else {
-        login(newUser.email, newUser.password);
+        setMessage(data.message || 'Registration failed');
       }
-    } catch (err) {
-      setError("Registration error occured.");
-    }
-  };
-
-  const login = async (email, password) => {
-    const response = await axios.post(`${API_URL}/login`, {
-      email,
-      password,
-    });
-
-    if (response.status === 200) {
-    //   const userInfo = {
-    //     userId: response.data.userId,
-    //     username: response.data.username,
-    //     highestScore: response.data.highestScore,
-    //   };
-
-    //   localStorage.setItem("user_data", JSON.stringify(userInfo));
-      navigate("/");
+    } catch (error) {
+      setMessage('Registration failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="container">
-      <div className="head">
-        <div className="maintext">Register</div>
-        <div className="underline"></div>
-      </div>
+      <div className="card">
+        <h1>Create Account</h1>
+        <p>Join our room management system</p>
 
-      <form onSubmit={registerMe}>
-        <div className="inputs">
-          <div className="input">
-            {/* <img src={email_icon} alt="Email Icon" /> */}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Full Name</label>
             <input
-              type="name"
-              name="username"
-              placeholder="Name"
-              value={newUser.username}
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
+              placeholder="Enter your full name"
+              style={{ border: '2px solid #3498db' }}
             />
+            <small>Current value: {formData.name}</small>
           </div>
 
-          <div className="input">
-            {/* <img src={email_icon} alt="Email Icon" /> */}
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
             <input
               type="email"
+              id="email"
               name="email"
-              placeholder="Email"
-              value={newUser.email}
+              value={formData.email}
               onChange={handleChange}
               required
+              placeholder="Enter your email"
+              style={{ border: '2px solid #3498db' }}
             />
+            <small>Current value: {formData.email}</small>
           </div>
 
-          <div className="input">
-            {/* <img src={password_icon} alt="Password Icon" /> */}
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
             <input
               type="password"
+              id="password"
               name="password"
-              placeholder="Password"
-              value={newUser.password}
+              value={formData.password}
               onChange={handleChange}
               required
+              placeholder="Enter your password"
+              minLength="6"
+              style={{ border: '2px solid #3498db' }}
             />
+            <small>Current value: {formData.password}</small>
           </div>
-        </div>
 
-        {error && <div className="error">{error}</div>}
+          {message && (
+            <div className={message.includes('successful') ? 'success' : 'error'}>
+              {message}
+            </div>
+          )}
 
-        <div className="submit_container">
-          <button type="submit" className="submit">
-            Register
+          <button type="submit" className="btn" disabled={loading}>
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
-        </div>
-      </form>
+        </form>
+
+        <p style={{ marginTop: '1rem' }}>
+          Already have an account? <a href="/login">Sign in</a>
+        </p>
+      </div>
     </div>
   );
-};
+}
 
 export default Register;
