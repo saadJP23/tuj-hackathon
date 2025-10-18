@@ -1,70 +1,120 @@
-import React, { useState } from 'react';
-import SignUpForm from './SignUpForm';
-import SignInForm from './SignInForm';
-import './Register.css'; // Assuming you adapt the CSS file
+
+import "./Register.css";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const Register = () => {
-  // State to control the 'active' class, which triggers the CSS animation/slide
-  const [isPanelActive, setPanelActive] = useState(false);
 
-  // Class name toggles between '' (for Sign In view) and 'right-panel-active' (for Sign Up view)
-  const containerClass = isPanelActive ? 'container right-panel-active' : 'container';
+  const API_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+  let [newUser, setNewUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const registerMe = async (e) => {
+    e.preventDefault();
+    // console.log("Rigestration button clicked ") // debugging -- leave in case it braks again
+
+    try {
+      let response = await axios.post(
+        `${API_URL}/register`,
+        newUser
+      );
+      if (response.data.message === "Email already registered") {
+        setError("Email aready exist.");
+      } else {
+        login(newUser.email, newUser.password);
+      }
+    } catch (err) {
+      setError("Registration error occured.");
+    }
+  };
+
+  const login = async (email, password) => {
+    const response = await axios.post(`${API_URL}/login`, {
+      email,
+      password,
+    });
+
+    if (response.status === 200) {
+    //   const userInfo = {
+    //     userId: response.data.userId,
+    //     username: response.data.username,
+    //     highestScore: response.data.highestScore,
+    //   };
+
+    //   localStorage.setItem("user_data", JSON.stringify(userInfo));
+      navigate("/");
+    }
+  };
 
   return (
-    <div className="registration-page">
-      <h2>Study Space Finder</h2>
-      <div className={containerClass} id="container">
-        {/* The two forms are placed side-by-side in the DOM */}
-        <SignUpForm />
-        <SignInForm />
-
-        {/* Overlay Container - handles the sliding panels */}
-        <div className="overlay-container">
-          <div className="overlay">
-            {/* Overlay Left - Visible when Sign Up form is active */}
-            <div className="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>To keep connected with us please login with your personal info</p>
-              <button
-                className="ghost"
-                id="signIn"
-                onClick={() => setPanelActive(false)}
-              >
-                Sign In
-              </button>
-            </div>
-            {/* Overlay Right - Visible when Sign In form is active */}
-            <div className="overlay-panel overlay-right">
-              <h1>Hello, OWL!</h1>
-              <p>Enter your personal details and find an empty study space</p>
-              <button
-                className="ghost"
-                id="signUp"
-                onClick={() => setPanelActive(true)}
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="container">
+      <div className="head">
+        <div className="maintext">Register</div>
+        <div className="underline"></div>
       </div>
 
-      <footer>
-        {/* Footer content goes here, using standard JSX attributes */}
-        <p>
-          Created with <i className="fa fa-heart"></i> by
-          <a target="_blank" href="https://florin-pop.com" rel="noopener noreferrer">Florin Pop</a>
-          - Read how I created this and how you can join the challenge
-          <a
-            target="_blank"
-            href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/"
-            rel="noopener noreferrer"
-          >
-            here
-          </a>
-          .
-        </p>
-      </footer>
+      <form onSubmit={registerMe}>
+        <div className="inputs">
+          <div className="input">
+            {/* <img src={email_icon} alt="Email Icon" /> */}
+            <input
+              type="name"
+              name="username"
+              placeholder="Name"
+              value={newUser.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="input">
+            {/* <img src={email_icon} alt="Email Icon" /> */}
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={newUser.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="input">
+            {/* <img src={password_icon} alt="Password Icon" /> */}
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={newUser.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        {error && <div className="error">{error}</div>}
+
+        <div className="submit_container">
+          <button type="submit" className="submit">
+            Register
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

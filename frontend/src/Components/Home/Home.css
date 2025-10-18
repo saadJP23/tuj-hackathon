@@ -231,6 +231,7 @@ h4 {
 .popover .actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .popover .actions button {

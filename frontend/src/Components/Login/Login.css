@@ -1,5 +1,0 @@
-/* Option A: simply import the same file if your build allows it */
-@import "../Register/Register.css";
-
-/* Option B: (duplicate styles here if you want an independent file)
-   Paste the exact same CSS as in Register.css to keep the design identical. */
