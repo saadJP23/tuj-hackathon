@@ -1,98 +1,72 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Login.css";
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true,
+});
 
-function Login({ setUser }) {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
+export default function Login() {
+  const nav = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setErr("");
     setLoading(true);
-    setMessage('');
-    
     try {
-      const response = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Save user to localStorage for persistence
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setUser(data.user);
-        setMessage(data.message);
-        navigate('/');
-      } else {
-        setMessage(data.message || 'Login failed');
-      }
-    } catch (error) {
-      setMessage('Login failed');
+      const res = await api.post("/login", { email, password });
+      // Store user (or token) as your backend returns
+      localStorage.setItem("user", JSON.stringify(res.data?.user || res.data));
+      nav("/");
+    } catch (e) {
+      setErr(e?.response?.data?.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <div className="card">
-        <h1>Sign In</h1>
-        <p>Welcome back to the room management system</p>
+    <section className="container section">
+      <div className="card auth-card">
+        <h1 className="title">Sign In</h1>
+        <p className="subtitle">Welcome back to the room management system</p>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-            />
-          </div>
+        {err && <div className="notice notice-error">{err}</div>}
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter your password"
-            />
-          </div>
+        <form onSubmit={onSubmit} className="form">
+          <label className="label" htmlFor="email">Email</label>
+          <input
+            id="email"
+            className="input"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            required
+          />
 
-          {message && (
-            <div className={message.includes('successful') ? 'success' : 'error'}>
-              {message}
-            </div>
-          )}
+          <label className="label" htmlFor="password">Password</label>
+          <input
+            id="password"
+            className="input"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            required
+          />
 
-          <button type="submit" className="btn" disabled={loading}>
-            {loading ? 'Signing In...' : 'Sign In'}
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Signing in…" : "Sign In"}
           </button>
         </form>
-
-        <p style={{ marginTop: '1rem' }}>
-          Don't have an account? <a href="/register">Create one</a>
-        </p>
       </div>
-    </div>
+    </section>
   );
 }
-
-export default Login;

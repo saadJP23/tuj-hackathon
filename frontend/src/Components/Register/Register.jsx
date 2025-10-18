@@ -1,118 +1,72 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import SignUpForm from './SignUpForm';
+import SignInForm from './SignInForm';
+import './Register.css'; // Assuming you adapt the CSS file
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const Register = () => {
+  // State to control the 'active' class, which triggers the CSS animation/slide
+  const [isPanelActive, setPanelActive] = useState(false);
 
-function Register() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    console.log('Input changed:', e.target.name, e.target.value);
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
-    
-    try {
-      const response = await fetch(`${API_URL}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setMessage('Registration successful! Please login.');
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        setMessage(data.message || 'Registration failed');
-      }
-    } catch (error) {
-      setMessage('Registration failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Class name toggles between '' (for Sign In view) and 'right-panel-active' (for Sign Up view)
+  const containerClass = isPanelActive ? 'container right-panel-active' : 'container';
 
   return (
-    <div className="container">
-      <div className="card">
-        <h1>Create Account</h1>
-        <p>Join our room management system</p>
+    <div className="registration-page">
+      <h2>Study Space Finder</h2>
+      <div className={containerClass} id="container">
+        {/* The two forms are placed side-by-side in the DOM */}
+        <SignUpForm />
+        <SignInForm />
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Enter your full name"
-              style={{ border: '2px solid #3498db' }}
-            />
-            <small>Current value: {formData.name}</small>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-              style={{ border: '2px solid #3498db' }}
-            />
-            <small>Current value: {formData.email}</small>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter your password"
-              minLength="6"
-              style={{ border: '2px solid #3498db' }}
-            />
-            <small>Current value: {formData.password}</small>
-          </div>
-
-          {message && (
-            <div className={message.includes('successful') ? 'success' : 'error'}>
-              {message}
+        {/* Overlay Container - handles the sliding panels */}
+        <div className="overlay-container">
+          <div className="overlay">
+            {/* Overlay Left - Visible when Sign Up form is active */}
+            <div className="overlay-panel overlay-left">
+              <h1>Welcome Back!</h1>
+              <p>To keep connected with us please login with your personal info</p>
+              <button
+                className="ghost"
+                id="signIn"
+                onClick={() => setPanelActive(false)}
+              >
+                Sign In
+              </button>
             </div>
-          )}
-
-          <button type="submit" className="btn" disabled={loading}>
-            {loading ? 'Creating Account...' : 'Create Account'}
-          </button>
-        </form>
-
-        <p style={{ marginTop: '1rem' }}>
-          Already have an account? <a href="/login">Sign in</a>
-        </p>
+            {/* Overlay Right - Visible when Sign In form is active */}
+            <div className="overlay-panel overlay-right">
+              <h1>Hello, OWL!</h1>
+              <p>Enter your personal details and find an empty study space</p>
+              <button
+                className="ghost"
+                id="signUp"
+                onClick={() => setPanelActive(true)}
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <footer>
+        {/* Footer content goes here, using standard JSX attributes */}
+        <p>
+          Created with <i className="fa fa-heart"></i> by
+          <a target="_blank" href="https://florin-pop.com" rel="noopener noreferrer">Florin Pop</a>
+          - Read how I created this and how you can join the challenge
+          <a
+            target="_blank"
+            href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/"
+            rel="noopener noreferrer"
+          >
+            here
+          </a>
+          .
+        </p>
+      </footer>
     </div>
   );
-}
+};
 
 export default Register;
