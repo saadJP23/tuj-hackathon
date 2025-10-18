@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TUJ Empty Classroom Finder</title>
+    <link rel="stylesheet" href="Home.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1><b>Campus Study Space Finder</b></h1>
+        <p>Find and navigate empty study spaces</p>
+      </header>
+
+      <div class="filters">
+        <div class="filter_group">
+          <span class="filter_label">Floors:</span>
+          <select id="capacityFilter" onchange="filterSpaces()">
+            <option value="all">All floors</option>
+            <option value="SecondFloor">2nd Floor</option>
+            <option value="ThirdFloor">3rd Floor</option>
+            <option value="FourthFloor">4th Floor</option>
+            <option value="FifthFloor">5th Floor</option>
+            <option value="SixthFloor">6th Floor</option>
+          </select>
+        </div>
+
+        <div class="filter_group">
+          <span class="filter_label">Busy Level:</span>
+          <select id="busylevel" onchange="filterSpaces()">
+            <option value="Any">Any Level</option>
+            <option value="Busy">Busy</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Empty">Empty</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="spaces_grid" id="spacesGrid"></div>
+    </div>
+  </body>
+</html>
