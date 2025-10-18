@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Space Finder</title>
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body>
+    <header>
+      <h4>Temple University <br />Japan Campus</h4>
+      <div class="header_div">
+        <h1>Study Space Finder</h1>
+      </div>
+    </header>
+
+    <div class="floor-selector">
+      <button data-floor="all">All Floors</button>
+      <button data-floor="1">1st Floor</button>
+      <button data-floor="2">2nd Floor</button>
+      <button data-floor="3">3rd Floor</button>
+      <button data-floor="4">4th Floor</button>
+      <button data-floor="5">5th Floor</button>
+      <button data-floor="6">6th Floor</button>
+    </div>
+
+    <!-- 3rd Floor -->
+    <div class="map-container" id="map3F">
+      <h2>3rd Floor Map</h2>
+      <div class="building">
+        <div class="room small empty">
+          302
+          <div class="tooltip">Room 302 - Capacity 20 - Empty</div>
+        </div>
+        <div class="room small busy">
+          304
+          <div class="tooltip">Room 304 - Capacity 20 - Busy</div>
+        </div>
+        <div class="room small empty">
+          305
+          <div class="tooltip">Room 305 - Capacity 20 - Empty</div>
+        </div>
+        <div class="room small full">
+          307
+          <div class="tooltip">Room 307 - Capacity 20 - Full</div>
+        </div>
+        <div class="room small empty">
+          308
+          <div class="tooltip">Room 308 - Capacity 20 - Empty</div>
+        </div>
+        <div class="room small busy">
+          310
+          <div class="tooltip">Room 310 - Capacity 20 - Busy</div>
+        </div>
+        <div class="room small empty">
+          311
+          <div class="tooltip">Room 311 - Capacity 20 - Empty</div>
+        </div>
+
+        <div class="room large empty">
+          301
+          <div class="tooltip">Room 301 - Capacity 40 - Empty</div>
+        </div>
+        <div class="room large busy">
+          303
+          <div class="tooltip">Room 303 - Capacity 40 - Busy</div>
+        </div>
+        <div class="room large full">
+          306
+          <div class="tooltip">Room 306 - Capacity 40 - Full</div>
+        </div>
+        <div class="room large empty">
+          309
+          <div class="tooltip">Room 309 - Capacity 40 - Empty</div>
+        </div>
+        <div class="room large busy">
+          312
+          <div class="tooltip">Room 312 - Capacity 40 - Busy</div>
+        </div>
+        <div class="room large empty">
+          314
+          <div class="tooltip">Room 314 - Capacity 40 - Empty</div>
+        </div>
+      </div>
+      <div class="legend">
+        <div><span class="empty"></span> Empty</div>
+        <div><span class="busy"></span> Busy</div>
+        <div><span class="full"></span> Full</div>
+      </div>
+    </div>
+
+    <!-- 4th Floor -->
+    <div class="map-container" id="map4F">
+      <h2>4th Floor Map</h2>
+      <div class="building">
+        <div class="room small empty">
+          402
+          <div class="tooltip">Room 402 - Capacity 20 - Empty</div>
+        </div>
+        <div class="room small busy">
+          404
+          <div class="tooltip">Room 404 - Capacity 20 - Busy</div>
+        </div>
+        <div class="room small full">
+          405
+          <div class="tooltip">Room 405 - Capacity 20 - Full</div>
+        </div>
+        <div class="room small empty">
+          407
+          <div class="tooltip">Room 407 - Capacity 20 - Empty</div>
+        </div>
+        <div class="room small busy">
+          408
+          <div class="tooltip">Room 408 - Capacity 20 - Busy</div>
+        </div>
+        <div class="room small empty">
+          410
+          <div class="tooltip">Room 410 - Capacity 20 - Empty</div>
+        </div>
+        <div class="room small full">
+          411
+          <div class="tooltip">Room 411 - Capacity 20 - Full</div>
+        </div>
+
+        <div class="room large empty">
+          401
+          <div class="tooltip">Room 401 - Capacity 40 - Empty</div>
+        </div>
+        <div class="room large busy">
+          403
+          <div class="tooltip">Room 403 - Capacity 40 - Busy</div>
+        </div>
+        <div class="room large full">
+          406
+          <div class="tooltip">Room 406 - Capacity 40 - Full</div>
+        </div>
+        <div class="room large empty">
+          409
+          <div class="tooltip">Room 409 - Capacity 40 - Empty</div>
+        </div>
+        <div class="room large busy">
+          412
+          <div class="tooltip">Room 412 - Capacity 40 - Busy</div>
+        </div>
+        <div class="room large empty">
+          414
+          <div class="tooltip">Room 414 - Capacity 40 - Empty</div>
+        </div>
+      </div>
+      <div class="legend">
+        <div><span class="empty"></span> Empty</div>
+        <div><span class="busy"></span> Busy</div>
+        <div><span class="full"></span> Full</div>
+      </div>
+    </div>
+
+    <script src="home.js"></script>
+  </body>
+</html>
